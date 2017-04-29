@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText text = (EditText) findViewById(R.id.usernameText);
                 TextView text1 = (TextView) findViewById(R.id.userTest);
-                text1.setText(text.getText());
+                text1.setText(text.getText().toString());
             }
         });
 
