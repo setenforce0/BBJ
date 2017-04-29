@@ -2,6 +2,7 @@ package tech.kcode.bbj;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,9 +21,13 @@ public class LoginActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText text = (EditText) findViewById(R.id.usernameText);
+                EditText user = (EditText) findViewById(R.id.usernameText);
                 TextView text1 = (TextView) findViewById(R.id.userTest);
-                text1.setText(text.getText().toString());
+                EditText pass = (EditText) findViewById(R.id.passwordText);
+                TextView text2 = (TextView) findViewById(R.id.passTest);
+                text1.setText(user.getText().toString());
+                text2.setText(pass.getText().toString());
+
             }
         });
 
