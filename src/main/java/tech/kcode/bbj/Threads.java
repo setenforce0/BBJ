@@ -1,12 +1,18 @@
 package tech.kcode.bbj;
 
+import android.content.Context;
+import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ListViewCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.PopupWindow;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -20,36 +26,55 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class LoginActivity extends AppCompatActivity {
+public class Threads extends AppCompatActivity {
+
+    public String result = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        Button button = (Button) findViewById(R.id.loginButton);
+        setContentView(R.layout.activity_threads);
+
+        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.refreshButton);
+
+        JSONObject jsonData = new JSONObject();
+        try {
+            jsonData.put("include_op", true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        postRequest("thread_index", jsonData);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText user = (EditText) findViewById(R.id.usernameText);
-                TextView text1 = (TextView) findViewById(R.id.userTest);
-                EditText pass = (EditText) findViewById(R.id.passwordText);
-                TextView text2 = (TextView) findViewById(R.id.passTest);
-                text1.setText(user.getText().toString());
-                text2.setText(pass.getText().toString());
-                JSONObject jsonBody = new JSONObject();
+                //TextView threadText = (TextView) findViewById(R.id.threadText);
+                String[] titles = {};
                 try {
-                    jsonBody.put("", "");
+                    titles = getThreadTitles(result);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                postRequest("thread_index", jsonBody);
-
+                Log.d("BBJ", Arrays.toString(titles));
+                for (int i = 0; i < titles.length; i++) {
+                    //threadText.append(titles[i] + "\n");
+                }
+                ListView threadList = (ListView) findViewById(R.id.threadList);
+                try {
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), R.layout.singlerow, R.id.test, getThreadTitles(result));
+                    threadList.setAdapter(adapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -60,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         //final TextView text = (TextView)findViewById(R.id.resultText);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String URL = "http://45.63.79.85/api/" + endpoint;
-        JSONObject jsonBody = MyData;
+        final JSONObject jsonBody = MyData;
         final String mRequestBody = jsonBody.toString();
         //text.setText(mRequestBody);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
@@ -99,9 +124,10 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
                 try {
+                    //TextView threadText = (TextView) findViewById(R.id.threadText);
                     String r = new String(response.data, "UTF-8");
-                    MainActivity.result = r;
-                    //text.setText(MainActivity.result);
+                    result = r;
+                    Log.d("BBJ", result);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -113,5 +139,18 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    public String[] getThreadTitles(String result) throws JSONException {
+        JSONObject jsonObj = new JSONObject(result);
+        Log.d("BBJ", jsonObj.toString());
+        JSONArray jsonResponseData = jsonObj.getJSONArray("data");
+        String[] titles = new String[jsonResponseData.length()];
+        for (int i = 0; i < jsonResponseData.length(); i++) {
+            JSONObject thing = jsonResponseData.getJSONObject(i);
+            String title = thing.get("title").toString();
+            titles[i] = title;
+        }
+        return titles;
+    }
 
 }
+
