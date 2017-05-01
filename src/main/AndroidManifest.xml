@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".Threads"></activity>
+        <activity android:name=".Threads" />
+        <activity android:name=".threadReplies"></activity>
     </application>
 
 </manifest>

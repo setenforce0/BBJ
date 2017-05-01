@@ -1,6 +1,7 @@
 package tech.kcode.bbj;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -68,13 +70,23 @@ public class Threads extends AppCompatActivity {
                 for (int i = 0; i < titles.length; i++) {
                     //threadText.append(titles[i] + "\n");
                 }
-                ListView threadList = (ListView) findViewById(R.id.threadList);
+                final ListView threadList = (ListView) findViewById(R.id.threadList);
                 try {
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(), R.layout.singlerow, R.id.test, getThreadTitles(result));
                     threadList.setAdapter(adapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                threadList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Object o = threadList.getItemAtPosition(position);
+                        String title = (String) o;
+                        Intent intent = new Intent(getApplicationContext(), threadReplies.class);
+                        intent.putExtra("threadTitle", title);
+                        startActivity(intent);
+                    }
+                });
             }
 
         });
