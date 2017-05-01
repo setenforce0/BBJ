@@ -5,4 +5,5 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="startString">Hello! This app is currently in the testing stages, but if you would like to contribute just submit a pull request at https://github.com/kadinparker/bbj Any help is appreciated :)</string>
 </resources>

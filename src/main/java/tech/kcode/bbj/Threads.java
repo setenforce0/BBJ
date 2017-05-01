@@ -44,7 +44,7 @@ public class Threads extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_threads);
 
-        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.refreshButton);
+        final FloatingActionButton button = (FloatingActionButton) findViewById(R.id.refreshButton);
 
         JSONObject jsonData = new JSONObject();
         try {
@@ -76,7 +76,15 @@ public class Threads extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
         });
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                button.performClick();
+            }
+        }, 500);
 
 
     }
