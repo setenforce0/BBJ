@@ -13,7 +13,5 @@ public class threadReplies extends AppCompatActivity {
         String s = getIntent().getStringExtra("threadTitle");
         final TextView title = (TextView) findViewById(R.id.threadTitle);
         title.setText(s);
-
-
     }
 }
